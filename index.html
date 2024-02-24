@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shrijan Khatiry</title>
+    <style>
+        body{
+            padding: 0;
+            margin: 0;  
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: skyblue;
+        
+
+
+        }
+        .container{
+            background-color:orange;
+            border: 5px black solid;
+            border-radius: 25px;
+            width: 250px;
+            height: 400px;
+            text-align: center;
+        }
+        input{
+            width: 90px;
+            height: 35px;
+            margin: 10px;
+            background-color: rgb(133, 133, 133);
+        }
+
+        button{
+            padding: 10px 20px;
+            background-color: blue;
+            color: white;
+            cursor: pointer;
+
+        }
+        button:hover{
+            background-color: red;
+
+        }
+    </style>
+    </head>
+<body>
+    <div class="container">
+
+        <h1>Random number gusser</h1>
+        <h2>Guess the number between 1 - 100</h2>
+        <input type="number" id="userinput"><br><br>
+        <button onclick="checkguess()">Check Guess</button>
+        <p id ="message"></p>
+    </div>
+
+    </body>
+    <script>
+        const randomNumber = Math.floor(Math.random()*101);
+
+        function checkguess(){
+            const guess=parseInt(document.getElementById("userinput").value);
+
+            if (guess===randomNumber){
+                document.getElementById("message").textContent="Congratulation! You guess the right number";
+
+            }
+            else if (isNaN(guess)){
+                document.getElementById("message").textContent="Enter a number";
+            }
+            else if (guess< randomNumber){
+                document.getElementById("message").textContent="Think of a higher number";
+            }
+            else{
+                document.getElementById("message").textContent="Think of a lower number";
+
+            }
+        }
+        
+    </script>
+</html>
