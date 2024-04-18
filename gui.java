@@ -11,12 +11,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-
-
 public class gui extends JFrame {
     private static final String EXPENSES_DIRECTORY = "Expenses/";
     private static final String EXPENSES_FILENAME = EXPENSES_DIRECTORY + "Shrijan_expenses.json";
     private static final String INCOMES_FILENAME = "Shrijan_incomes.json";
+    private static final String USER_INFO_FILENAME = "user_information.json";
     private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
     private static final String[] FRIENDS = {"Keshav", "Vaibhav", "Praveen", "Ayush", "Harsh"};
@@ -285,6 +284,23 @@ public class gui extends JFrame {
             // If file does not exist or cannot be read, return an empty list
         }
         return new ArrayList<>();
+    }
+
+    private void saveUserInfo(UserInfo userInfo) {
+        try (FileWriter writer = new FileWriter(USER_INFO_FILENAME)) {
+            gson.toJson(userInfo, writer);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private UserInfo loadUserInfo() {
+        try (FileReader reader = new FileReader(USER_INFO_FILENAME)) {
+            return gson.fromJson(reader, UserInfo.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public static void main(String[] args) {
