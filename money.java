@@ -4,12 +4,119 @@ import java.io.FileWriter;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
+// Parent Expense class
+class Expense {
+    double amount;
+    String category;
 
+    public Expense(double amount, String category) {
+        this.amount = amount;
+        this.category = category;
+    }
 
-public class trying {
+    @Override
+    public String toString() {
+        return "Amount: " + amount + ", Category: " + category;
+    }
+}
+
+// Subclasses for different expense categories
+class HomeExpense extends Expense {
+    public HomeExpense(double amount) {
+        super(amount, "Home");
+    }
+}
+
+class BillsExpense extends Expense {
+    public BillsExpense(double amount) {
+        super(amount, "Bills");
+    }
+}
+
+class HealthExpense extends Expense {
+    public HealthExpense(double amount) {
+        super(amount, "Health");
+    }
+}
+
+class EducationExpense extends Expense {
+    public EducationExpense(double amount) {
+        super(amount, "Education");
+    }
+}
+
+class TransportationExpense extends Expense {
+    public TransportationExpense(double amount) {
+        super(amount, "Transportation");
+    }
+}
+
+class FoodExpense extends Expense {
+    public FoodExpense(double amount) {
+        super(amount, "Food");
+    }
+}
+//Income Parent Class
+class Income
+{
+    double amount;
+    String category;
+
+    public Income(double amount,String category)
+    {
+        this.amount=amount;
+        this.category=category;
+    }
+
+    @Override
+    public String toString()
+    {
+        return "Amount: "+amount+", Category: "+category;
+    }
+}
+//Subclasses for different Income categories
+class Refund extends Income
+{
+    public Refund(double amount) {
+        super(amount, "Refund");
+    }
+}
+class Grant extends Income
+{
+    public Grant(double amount) {
+        super(amount, "Grant");
+    }
+}
+class Salary extends Income
+{
+    public Salary(double amount) {
+        super(amount, "Salary");
+    }
+}
+class Sale extends Income
+{
+    public Sale(double amount) {
+        super(amount, "Sale");
+    }
+}
+class Award extends Income
+{
+    public Award(double amount) {
+        super(amount, "Awards");
+    }
+}
+class Coupon extends Income
+{
+    public Coupon(double amount) {
+        super(amount, "Coupon");
+    }
+}
+
+public class Main {
     private static final String EXPENSES_FILENAME = "Shrijan_expenses.json";
     private static final String INCOMES_FILENAME = "Shrijan_incomes.json";
     private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
@@ -166,16 +273,39 @@ public class trying {
         double amount = scanner.nextDouble();
         scanner.nextLine(); // Consume newline
 
-        double splitAmount = amount / (FRIENDS.length + 1); // Including yourself
-        for (int i = 0; i < FRIENDS.length; i++) {
-            List<Expense> friendExpenses = loadFriendExpenses(i);
-            friendExpenses.add(new Expense(splitAmount, "Shared"));
-            saveFriendExpenses(i, friendExpenses);
-            System.out.println("Split amount added to " + FRIENDS[i] + "'s expenses.");
+        List<String> selectedFriends = selectFriends(scanner);
+
+        double splitAmount = amount / (selectedFriends.size() + 1); // Including yourself
+        for (String friend : selectedFriends) {
+            int index = Arrays.asList(FRIENDS).indexOf(friend);
+            if (index != -1) {
+                List<Expense> friendExpenses = loadFriendExpenses(index);
+                friendExpenses.add(new Expense(splitAmount, "Shared"));
+                saveFriendExpenses(index, friendExpenses);
+                System.out.println("Split amount added to " + friend + "'s expenses.");
+            }
         }
         expenses.add(new Expense(splitAmount, "Shared"));
         saveExpenses(expenses);
         System.out.println("Split amount added to your expenses.");
+    }
+
+    private static List<String> selectFriends(Scanner scanner) {
+        List<String> selectedFriends = new ArrayList<>();
+        System.out.println("Select friends to split bill with:");
+        for (int i = 0; i < FRIENDS.length; i++) {
+            System.out.println((i + 1) + ". " + FRIENDS[i]);
+        }
+        System.out.println("Enter the numbers separated by spaces (e.g., '1 3 4'), or '0' to split with everyone:");
+        String input = scanner.nextLine();
+        String[] numbers = input.split(" ");
+        for (String number : numbers) {
+            int index = Integer.parseInt(number) - 1;
+            if (index >= 0 && index < FRIENDS.length) {
+                selectedFriends.add(FRIENDS[index]);
+            }
+        }
+        return selectedFriends;
     }
 
     private static void saveExpenses(List<Expense> expenses) {
@@ -260,3 +390,4 @@ public class trying {
         }
     }
 }
+
